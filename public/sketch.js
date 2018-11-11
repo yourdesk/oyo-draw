@@ -2,29 +2,30 @@ var socket;
 var color;
 var hex1, size;
 
-function setup() {
+function setup() { // connect to server and define variables
     createCanvas(1280, 720);
     background(51);
 
-    socket = io.connect('http://localhost:3000');
-    socket.on('mouse', newDrawing);
+    socket = io.connect('http://localhost:3000'); // connect to port 3000
+    socket.on('mouse', newDrawing); // if mouse is dragged, run mouseDragged()
 
 }
 
-function clearCanvas() {
-    
-}
-
-function newDrawing(data) {
+function newDrawing(data) { // make new drawing for other users
     stroke(color(data.c));
     strokeWeight(data.s);
     line(data.x, data.y, data.px, data.py);
 }
 
+function keyPressed() { // if key pressed, do this
+    
+
+}
+
 function mouseDragged() {
-    hex = document.getElementById("hex1").value;
-    size = document.getElementById("size").value;
-    console.log('sending: ' + mouseX + ',' + mouseY + ',' + hex + ',' + size);
+    hex = document.getElementById("hex1").value; // get hex value for color
+    size = document.getElementById("size").value; // get size
+    console.log('sending: ' + mouseX + ',' + mouseY + ',' + hex + ',' + size); // logging
     var data = {
         x: mouseX,
         y: mouseY,
@@ -32,17 +33,11 @@ function mouseDragged() {
         py: pmouseY,
         c: hex,
         s: size
-        /*text_data: {
-            x: mouseX,
-            y: mouseY,
-            text: typed_text
-        }
-        */
-    };
-    socket.emit('mouse', data);
+    }; // data to send
+    socket.emit('mouse', data); // sends data to server
 
     
-    strokeWeight(size);
-    stroke(color(hex));
-    line(mouseX, mouseY, pmouseX, pmouseY);
+    strokeWeight(size); // size
+    stroke(color(hex)); // color
+    line(mouseX, mouseY, pmouseX, pmouseY); // draw a line
 }
